@@ -1,59 +1,38 @@
- GeoPandas 
-0.4.0 
- 
-Getting Started
-Installation
-Examples Gallery
-User Guide
-Data Structures
-Reading and Writing Files
-Indexing and Selecting Data
-Making Maps
-Managing Projections
+## GeoPandas : Geometric Manipulations
+* Constructive Methods
 
-Geometric Manipulations
-Constructive Methods
-
-Affine transformations
-Set Operations with overlay
-Aggregation with dissolve
-Merging Data
-Geocoding
-Reference Guide
-Reference to All Attributes and Methods
-Developer
-Contributing to GeoPandas
-Docs » Geometric Manipulations 
-View page source 
-
-Geometric Manipulations
+### Geometric Manipulations
 geopandas makes available all the tools for geometric manipulations in the *shapely* library.
 Note that documentation for all set-theoretic tools for creating new shapes using the relationship between two different spatial datasets – like creating intersections, or differences – can be found on the set operations page.
-Constructive Methods
-GeoSeries.buffer(distance, resolution=16) 
+
+### Constructive Methods
+* GeoSeries.buffer(distance, resolution=16) 
 Returns a GeoSeries of geometries representing all points within a given distance of each geometric object.
-GeoSeries.boundary 
+* GeoSeries.boundary 
 Returns a GeoSeries of lower dimensional objects representing each geometries’s set-theoretic boundary.
-GeoSeries.centroid 
+* GeoSeries.centroid 
 Returns a GeoSeries of points for each geometric centroid.
-GeoSeries.convex_hull 
+* GeoSeries.convex_hull 
 Returns a GeoSeries of geometries representing the smallest convex Polygon containing all the points in each object unless the number of points in the object is less than three. For two points, the convex hull collapses to a LineString; for 1, a Point.
-GeoSeries.envelope 
+* GeoSeries.envelope 
 Returns a GeoSeries of geometries representing the point or smallest rectangular polygon (with sides parallel to the coordinate axes) that contains each object.
-GeoSeries.simplify(tolerance, preserve_topology=True) 
+* GeoSeries.simplify(tolerance, preserve_topology=True) 
 Returns a GeoSeries containing a simplified representation of each object.
-GeoSeries.unary_union 
+* GeoSeries.unary_union 
 Return a geometry containing the union of all geometries in the GeoSeries.
-Affine transformations
-GeoSeries.rotate(self, angle, origin='center', use_radians=False) 
+
+### Affine transformations
+* GeoSeries.rotate(self, angle, origin='center', use_radians=False) 
 Rotate the coordinates of the GeoSeries.
-GeoSeries.scale(self, xfact=1.0, yfact=1.0, zfact=1.0, origin='center') 
+* GeoSeries.scale(self, xfact=1.0, yfact=1.0, zfact=1.0, origin='center') 
 Scale the geometries of the GeoSeries along each (x, y, z) dimensio.
-GeoSeries.skew(self, angle, origin='center', use_radians=False) 
+* GeoSeries.skew(self, angle, origin='center', use_radians=False) 
 Shear/Skew the geometries of the GeoSeries by angles along x and y dimensions.
-GeoSeries.translate(self, xoff=0.0, yoff=0.0, zoff=0.0) 
+* GeoSeries.translate(self, xoff=0.0, yoff=0.0, zoff=0.0) 
 Shift the coordinates of the GeoSeries.
-Examples of Geometric Manipulations
+
+## Examples of Geometric Manipulations
+<pre><code>
 >>> p1 = Polygon([(0, 0), (1, 0), (1, 1)])
 >>> p2 = Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])
 >>> p3 = Polygon([(2, 0), (3, 0), (3, 1), (2, 1)])
@@ -63,8 +42,10 @@ Examples of Geometric Manipulations
 1    POLYGON ((0.0000000000000000 0.000000000000000...
 2    POLYGON ((2.0000000000000000 0.000000000000000...
 dtype: object
- 
+</code></pre>
+
 Some geographic operations return normal pandas object. The area property of a GeoSeries will return a pandas.Series containing the area of each item in the GeoSeries:
+<pre><code>
 >>> print g.area
 0    0.5
 1    1.0
@@ -77,10 +58,13 @@ Out[15]:
 1    POLYGON ((-0.5000000000000000 0.00000000000000...
 2    POLYGON ((1.5000000000000000 0.000000000000000...
 dtype: object
- 
+</code></pre> 
 GeoPandas objects also know how to plot themselves. GeoPandas uses descartes to generate a matplotlib plot. To generate a plot of our GeoSeries, use:
+<pre><code>
 >>> g.plot()
+</code></pre>
 GeoPandas also implements alternate constructors that can read any data format recognized by fiona. To read a zip file containing an ESRI shapefile with the borough boundaries of New York City (GeoPandas includes this as an example dataset):
+<pre><code>
 >>> nybb_path = geopandas.datasets.get_path('nybb')
 >>> boros = GeoDataFrame.from_file(nybb_path)
 >>> boros = boros.set_index('BoroCode')
@@ -109,15 +93,19 @@ BoroCode
 3    POLYGON ((977855.4451904296875000 188082.32238...
 4    POLYGON ((1017949.9776000976562500 225426.8845...
 dtype: object
- 
+</code></pre> 
 To demonstrate a more complex operation, we’ll generate a GeoSeries containing 2000 random points:
+<pre><code>
 >>> from shapely.geometry import Point
 >>> xmin, xmax, ymin, ymax = 900000, 1080000, 120000, 280000
 >>> xc = (xmax - xmin) * np.random.random(2000) + xmin
 >>> yc = (ymax - ymin) * np.random.random(2000) + ymin
 >>> pts = GeoSeries([Point(x, y) for x, y in zip(xc, yc)])
+</code></pre>
 Now draw a circle with fixed radius around each point:
+<pre><code>
 >>> circles = pts.buffer(2000)
+</code></pre>
 We can collapse these circles into a single shapely MultiPolygon geometry with
 >>> mp = circles.unary_union
 To extract the part of this geometry contained in each borough, we can just use:
@@ -128,6 +116,7 @@ and to get the area outside of the holes:
  
 Note that this can be simplified a bit, since geometry is available as an attribute on a GeoDataFrame, and the intersection and difference methods are implemented with the “&” and “-” operators, respectively. For example, the latter could have been expressed simply as boros.geometry - mp.
 It’s easy to do things like calculate the fractional area in each borough that are in the holes:
+<pre><code>
 >>> holes.area / boros.geometry.area
 BoroCode
 1           0.602015
@@ -136,10 +125,6 @@ BoroCode
 4           0.577020
 5           0.559507
 dtype: float64
-
+</code></pre>
 
 Next 
- Previous 
-
-© Copyright 2013–2018, GeoPandas developers. 
-Built with Sphinx using a theme provided by Read the Docs. 
