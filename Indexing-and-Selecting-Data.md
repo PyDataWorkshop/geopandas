@@ -1,30 +1,12 @@
 GeoPandas 0.4.0 
 =================
-Getting Started
-Installation
-Examples Gallery
-User Guide
-Data Structures
-Reading and Writing Files
-Indexing and Selecting Data
-Making Maps
-Managing Projections
-Geometric Manipulations
-Set Operations with overlay
-Aggregation with dissolve
-Merging Data
-Geocoding
-Reference Guide
-Reference to All Attributes and Methods
-Developer
-Contributing to GeoPandas
-Docs » Indexing and Selecting Data 
-View page source 
+
 
 ### Indexing and Selecting Data
-GeoPandas inherits the standard pandas methods for indexing/selecting data. This includes label based indexing with .loc and integer position based indexing with .iloc, which apply to both GeoSeries and GeoDataFrame objects. For more information on indexing/selecting, see the pandas documentation.
-In addition to the standard pandas methods, GeoPandas also provides coordinate based indexing with the cx indexer, which slices using a bounding box. Geometries in the GeoSeries or GeoDataFrame that intersect the bounding box will be returned.
-Using the world dataset, we can use this functionality to quickly select all countries whose boundaries extend into the southern hemisphere.
+* GeoPandas inherits the standard pandas methods for indexing/selecting data. This includes label based indexing with ``.loc`` and integer position based indexing with ``.iloc``, which apply to both GeoSeries and GeoDataFrame objects. (For more information on indexing/selecting, see the pandas documentation.)
+* In addition to the standard pandas methods, GeoPandas also provides coordinate based indexing with the cx indexer, which slices using a bounding box. 
+* Geometries in the GeoSeries or GeoDataFrame that intersect the bounding box will be returned.
+* Using the world dataset, we can use this functionality to quickly select all countries whose boundaries extend into the southern hemisphere.
 
 <pre><code>
 In [1]: world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
