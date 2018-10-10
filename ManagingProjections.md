@@ -1,4 +1,4 @@
-Managing Projections
+## Managing Projections
 
 ### Coordinate Reference Systems
 CRS are important because the geometric shapes in a GeoSeries or GeoDataFrame object are simply a collection of coordinates in an arbitrary space. A CRS tells Python how those coordinates related to places on the Earth.
@@ -6,9 +6,9 @@ CRS are referred to using codes called proj4 strings. You can find the codes for
 The same CRS can often be referred to in many ways. For example, one of the most commonly used CRS is the WGS84 latitude-longitude projection. One proj4 representation of this projection is: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs". But common projections can also be referred to by EPSG codes, so this same projection can also called using the proj4 string "+init=epsg:4326".
 geopandas can accept lots of representations of CRS, including the proj4 string itself ("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs") or parameters broken out in a dictionary: {'proj': 'latlong', 'ellps': 'WGS84', 'datum': 'WGS84', 'no_defs': True}). In addition, some functions will take EPSG codes directly.
 For reference, a few very common projections and their proj4 strings:
-WGS84 Latitude/Longitude: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" or "+init=epsg:4326"
-UTM Zones (North): "+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
-UTM Zones (South): "+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +south"
+* WGS84 Latitude/Longitude: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" or "+init=epsg:4326"
+* UTM Zones (North): "+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+* UTM Zones (South): "+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +south"
 
 ### Setting a Projection
 There are two relevant operations for projections: setting a projection and re-projecting.
@@ -16,10 +16,13 @@ Setting a projection may be necessary when for some reason geopandas has coordin
 Be aware that most of the time you don’t have to set a projection. Data loaded from a reputable source (using the from_file() command) should always include projection information. You can see an objects current CRS through the crs attribute: my_geoseries.crs.
 From time to time, however, you may get data that does not include a projection. In this situation, you have to set the CRS so geopandas knows how to interpret the coordinates.
 For example, if you convert a spreadsheet of latitudes and longitudes into a GeoSeries by hand, you would set the projection by assigning the WGS84 latitude-longitude CRS to the crs attribute:
+<pre><code>
 my_geoseries.crs = {'init' :'epsg:4326'}
+</code></pre>
 
 ### Re-Projecting
 Re-projecting is the process of changing the representation of locations from one coordinate system to another. All projections of locations on the Earth into a two-dimensional plane are distortions, the projection that is best for your application may be different from the projection associated with the data you import. In these cases, data can be re-projected using the to_crs command:
+<pre><code>
 # load example data
 In [1]: world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
 
@@ -42,9 +45,5 @@ In [7]: ax = world.plot()
 
 In [8]: ax.set_title("Mercator");
   
-
-Next 
- Previous 
-
-© Copyright 2013–2018, GeoPandas developers. 
+</code></pre>
 Built with Sphinx using a theme provided by Read the Docs. 
