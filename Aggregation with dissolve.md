@@ -4,9 +4,10 @@ dissolve Example
 
 #### Aggregation with dissolve
 It is often the case that we find ourselves working with spatial data that is more granular than we need. For example, we might have data on sub-national units, but we’re actually interested in studying patterns at the level of countries.
-In a non-spatial setting, we aggregate our data using the groupby function. But when working with spatial data, we need a special tool that can also aggregate geometric features. In the geopandas library, that functionality is provided by the dissolve function.
-dissolve can be thought of as doing three things: 
-(a) it dissolves all the geometries within a given group together into a single geometric feature (using the unary_union method), and (b) it aggregates all the rows of data in a group using groupby.aggregate(), and 
+In a non-spatial setting, we aggregate our data using the ``groupby`` function. But when working with spatial data, we need a special tool that can also aggregate geometric features. In the geopandas library, that functionality is provided by the dissolve function.
+
+``dissolve`` can be thought of as doing three things: 
+(a) it dissolves all the geometries within a given group together into a single geometric feature (using the unary_union method), and (b) it aggregates all the rows of data in a group using ``groupby.aggregate()``, and 
 (c) it combines those two results.
 
 #### dissolve Example
@@ -22,6 +23,9 @@ In [3]: continents = world.dissolve(by='continent')
 In [4]: continents.plot();
 
 In [5]: continents.head()
+</code></pre>
+
+<pre><code>
 Out[5]: 
                                                         geometry
 continent                                                       
@@ -31,7 +35,7 @@ Asia           (POLYGON ((120.7156087586305 -10.2395813940878...
 Europe         (POLYGON ((-52.55642473001839 2.50470530843705...
 North America  (POLYGON ((-61.68000000000001 10.76, -61.105 1...
 </code></pre> 
-If we are interested in aggregate populations, however, we can pass different functions to the dissolve method to aggregate populations:
+If we are interested in aggregate populations, however, we can pass different functions to the ``dissolve`` method to aggregate populations:
 <pre><code>
 In [6]: world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
 
@@ -42,6 +46,9 @@ In [8]: continents = world.dissolve(by='continent', aggfunc='sum')
 In [9]: continents.plot(column = 'pop_est', scheme='quantiles', cmap='YlOrRd');
 
 In [10]: continents.head()
+</code></pre>
+
+<pre><code>
 Out[10]: 
                                                         geometry       pop_est
 continent                                                                     
