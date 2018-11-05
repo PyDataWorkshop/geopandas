@@ -6,29 +6,29 @@ geopandas makes available all the tools for geometric manipulations in the *shap
 Note that documentation for all set-theoretic tools for creating new shapes using the relationship between two different spatial datasets – like creating intersections, or differences – can be found on the set operations page.
 
 ### Constructive Methods
-* GeoSeries.buffer(distance, resolution=16) 
+* ``GeoSeries.buffer(distance, resolution=16)`` 
 Returns a GeoSeries of geometries representing all points within a given distance of each geometric object.
-* GeoSeries.boundary 
+* ``GeoSeries.boundary`` 
 Returns a GeoSeries of lower dimensional objects representing each geometries’s set-theoretic boundary.
-* GeoSeries.centroid 
+* ``GeoSeries.centroid`` 
 Returns a GeoSeries of points for each geometric centroid.
-* GeoSeries.convex_hull 
+* ``GeoSeries.convex_hull`` 
 Returns a GeoSeries of geometries representing the smallest convex Polygon containing all the points in each object unless the number of points in the object is less than three. For two points, the convex hull collapses to a LineString; for 1, a Point.
-* GeoSeries.envelope 
+* ``GeoSeries.envelope`` 
 Returns a GeoSeries of geometries representing the point or smallest rectangular polygon (with sides parallel to the coordinate axes) that contains each object.
-* GeoSeries.simplify(tolerance, preserve_topology=True) 
+* ``GeoSeries.simplify(tolerance, preserve_topology=True)`` 
 Returns a GeoSeries containing a simplified representation of each object.
-* GeoSeries.unary_union 
+* ``GeoSeries.unary_union``
 Return a geometry containing the union of all geometries in the GeoSeries.
 
 ### Affine transformations
-* GeoSeries.rotate(self, angle, origin='center', use_radians=False) 
+* ``GeoSeries.rotate(self, angle, origin='center', use_radians=False)`` 
 Rotate the coordinates of the GeoSeries.
-* GeoSeries.scale(self, xfact=1.0, yfact=1.0, zfact=1.0, origin='center') 
-Scale the geometries of the GeoSeries along each (x, y, z) dimensio.
-* GeoSeries.skew(self, angle, origin='center', use_radians=False) 
+* ``GeoSeries.scale(self, xfact=1.0, yfact=1.0, zfact=1.0, origin='center')`` 
+Scale the geometries of the GeoSeries along each (x, y, z) dimension.
+* ``GeoSeries.skew(self, angle, origin='center', use_radians=False)`` 
 Shear/Skew the geometries of the GeoSeries by angles along x and y dimensions.
-* GeoSeries.translate(self, xoff=0.0, yoff=0.0, zoff=0.0) 
+* ``GeoSeries.translate(self, xoff=0.0, yoff=0.0, zoff=0.0)`` 
 Shift the coordinates of the GeoSeries.
 
 ## Examples of Geometric Manipulations
@@ -70,6 +70,9 @@ GeoPandas also implements alternate constructors that can read any data format r
 >>> boros = boros.set_index('BoroCode')
 >>> boros = boros.sort_index()
 >>> boros
+</code></pre>
+
+<pre><code>
                BoroName    Shape_Area     Shape_Leng  \
 BoroCode
 1             Manhattan  6.364422e+08  358532.956418
@@ -93,6 +96,7 @@ BoroCode
 3    POLYGON ((977855.4451904296875000 188082.32238...
 4    POLYGON ((1017949.9776000976562500 225426.8845...
 dtype: object
+
 </code></pre> 
 To demonstrate a more complex operation, we’ll generate a GeoSeries containing 2000 random points:
 <pre><code>
@@ -107,13 +111,19 @@ Now draw a circle with fixed radius around each point:
 >>> circles = pts.buffer(2000)
 </code></pre>
 We can collapse these circles into a single shapely MultiPolygon geometry with
+<pre><code>
 >>> mp = circles.unary_union
 To extract the part of this geometry contained in each borough, we can just use:
+</code></pre>
+<pre><code>
 >>> holes = boros['geometry'].intersection(mp)
- 
+</code></pre>
+
 and to get the area outside of the holes:
+<pre><code>
 >>> boros_with_holes = boros['geometry'].difference(mp)
- 
+</code></pre>
+
 Note that this can be simplified a bit, since geometry is available as an attribute on a GeoDataFrame, and the intersection and difference methods are implemented with the “&” and “-” operators, respectively. For example, the latter could have been expressed simply as boros.geometry - mp.
 It’s easy to do things like calculate the fractional area in each borough that are in the holes:
 <pre><code>
@@ -127,4 +137,3 @@ BoroCode
 dtype: float64
 </code></pre>
 
-Next 
